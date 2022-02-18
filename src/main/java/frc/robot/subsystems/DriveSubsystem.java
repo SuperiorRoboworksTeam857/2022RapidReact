@@ -13,38 +13,27 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   // The motors on the left side of the drive.
+  CANSparkMax m_frontLeftMotor = new CANSparkMax(DriveConstants.kLeftMotor1Port, MotorType.kBrushless);
+  CANSparkMax m_backLeftMotor = new CANSparkMax(DriveConstants.kLeftMotor2Port, MotorType.kBrushless);
   private final MotorControllerGroup m_leftMotors =
-      new MotorControllerGroup(
-          new PWMSparkMax(DriveConstants.kLeftMotor1Port),
-          new PWMSparkMax(DriveConstants.kLeftMotor2Port));
-
+      new MotorControllerGroup(m_frontLeftMotor, m_backLeftMotor);
+          
   // The motors on the right side of the drive.
+  CANSparkMax m_frontRightMotor = new CANSparkMax(DriveConstants.kRightMotor1Port, MotorType.kBrushless);
+  CANSparkMax m_backRightMotor = new CANSparkMax(DriveConstants.kRightMotor2Port, MotorType.kBrushless);
   private final MotorControllerGroup m_rightMotors =
-      new MotorControllerGroup(
-          new PWMSparkMax(DriveConstants.kRightMotor1Port),
-          new PWMSparkMax(DriveConstants.kRightMotor2Port));
+      new MotorControllerGroup(m_frontRightMotor, m_backRightMotor);
 
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
-
-  // The left-side drive encoder
-  private final Encoder m_leftEncoder =
-      new Encoder(
-          DriveConstants.kLeftEncoderPorts[0],
-          DriveConstants.kLeftEncoderPorts[1],
-          DriveConstants.kLeftEncoderReversed);
-
-  // The right-side drive encoder
-  private final Encoder m_rightEncoder =
-      new Encoder(
-          DriveConstants.kRightEncoderPorts[0],
-          DriveConstants.kRightEncoderPorts[1],
-          DriveConstants.kRightEncoderReversed);
 
   // The gyro sensor
   private final Gyro m_gyro = new ADXRS450_Gyro();
@@ -58,10 +47,11 @@ public class DriveSubsystem extends SubsystemBase {
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     m_rightMotors.setInverted(true);
+    m_frontLeftMotor.getEncoder().setPositionConversionFactor(DriveConstants.kEncoderDistancePerPulse);
+    m_frontRightMotor.getEncoder().setPositionConversionFactor(DriveConstants.kEncoderDistancePerPulse);
 
-    // Sets the distance per pulse for the encoders
-    m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-    m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
+    m_frontLeftMotor.getEncoder().setVelocityConversionFactor(DriveConstants.kEncoderDistancePerPulse/60);
+    m_frontRightMotor.getEncoder().setVelocityConversionFactor(DriveConstants.kEncoderDistancePerPulse/60);
 
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
@@ -71,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+        m_gyro.getRotation2d(), m_frontLeftMotor.getEncoder().getPosition(), m_frontRightMotor.getEncoder().getPosition());
   }
 
   /**
@@ -80,6 +70,10 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
+    SmartDashboard.putNumber("x", m_odometry.getPoseMeters().getTranslation().getX());
+    SmartDashboard.putNumber("y", m_odometry.getPoseMeters().getTranslation().getY());
+    SmartDashboard.putNumber("gyroPOS", m_gyro.getAngle());
+
     return m_odometry.getPoseMeters();
   }
 
@@ -89,8 +83,12 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The current wheel speeds.
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
-  }
+    SmartDashboard.putNumber("left speed", m_frontLeftMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("right speed", m_frontRightMotor.getEncoder().getVelocity());
+
+    return new DifferentialDriveWheelSpeeds(m_frontLeftMotor.getEncoder().getVelocity(),
+                                            m_frontRightMotor.getEncoder().getVelocity());
+  } // old code has a negative for right motor
 
   /**
    * Resets the odometry to the specified pose.
@@ -111,6 +109,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void arcadeDrive(double fwd, double rot) {
     m_drive.arcadeDrive(fwd, rot);
   }
+  public void arcadeDrive(double fwd, double rot, boolean squareInputs){
+    m_drive.arcadeDrive(fwd, rot, squareInputs);
+  }
 
   /**
    * Controls the left and right sides of the drive directly with voltages.
@@ -120,41 +121,17 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     m_leftMotors.setVoltage(leftVolts);
-    m_rightMotors.setVoltage(rightVolts);
+    m_rightMotors.setVoltage(rightVolts); // old code has a negative
+    SmartDashboard.putNumber("leftVolts", leftVolts);
+    SmartDashboard.putNumber("rightVolts", rightVolts);
+
     m_drive.feed();
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
-    m_leftEncoder.reset();
-    m_rightEncoder.reset();
-  }
-
-  /**
-   * Gets the average distance of the two encoders.
-   *
-   * @return the average of the two encoder readings
-   */
-  public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
-  }
-
-  /**
-   * Gets the left drive encoder.
-   *
-   * @return the left drive encoder
-   */
-  public Encoder getLeftEncoder() {
-    return m_leftEncoder;
-  }
-
-  /**
-   * Gets the right drive encoder.
-   *
-   * @return the right drive encoder
-   */
-  public Encoder getRightEncoder() {
-    return m_rightEncoder;
+    m_frontLeftMotor.getEncoder().setPosition(0);
+    m_frontRightMotor.getEncoder().setPosition(0);
   }
 
   /**

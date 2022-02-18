@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -16,6 +17,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -39,9 +41,14 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Joystick m_driverStick = new Joystick(OIConstants.kDriverStickPort);
 
+  private double topForwardSpeed = 0.7;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+      
+    CameraServer.startAutomaticCapture();
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -53,7 +60,7 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 m_robotDrive.arcadeDrive(
-                    -m_driverController.getLeftY(), m_driverController.getRightX()),
+                    -topForwardSpeed*m_driverStick.getY(), 0.55*m_driverStick.getThrottle()),
             m_robotDrive));
   }
 
@@ -65,9 +72,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(() -> m_robotDrive.setMaxOutput(0.5))
-        .whenReleased(() -> m_robotDrive.setMaxOutput(1));
+    new JoystickButton(m_driverStick, 2).whileHeld(() -> topForwardSpeed = 1)
+                                        .whenReleased(() -> topForwardSpeed = 0.7);
   }
 
   /**
@@ -76,6 +82,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    m_robotDrive.resetEncoders();
+    m_robotDrive.zeroHeading();
+
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -99,12 +108,11 @@ public class RobotContainer {
     // An example trajectory to follow.  All units in meters.
     Trajectory exampleTrajectory =
         TrajectoryGenerator.generateTrajectory(
+            List.of(
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(3, 0, new Rotation2d(0))),
             // Pass config
             config);
 
