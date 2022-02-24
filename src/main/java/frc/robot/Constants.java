@@ -44,6 +44,26 @@ public final class Constants {
     public static final double kPDriveVel = 2.28;
   }
 
+  public static final class IntakeConstants {
+    public static final int kIntakeMotorPort = 0;
+    public static final int kIntakeForwardPort = 7;
+    public static final int kIntakeReversePort = 15;
+  }
+
+  public static final class ClimberConstants {
+    public static final int kLeftMotorPort = 25;
+    public static final int kRightMotorPort = 22;
+    public static final int kClimberForwardPort = 6;
+    public static final int kClimberReversePort = 14;
+  }
+
+  public static final class ShooterConstants {
+    public static final int kFrontMotorPort = 30;
+    public static final int kBackMotorPort = 31;
+    public static final int kKickerForwardPort = 6;
+    public static final int kKickerReversePort = 14;
+  }
+
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kDriverStickPort = 1;
