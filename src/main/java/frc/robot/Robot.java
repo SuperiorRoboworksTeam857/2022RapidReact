@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.OIConstants;
+import frc.robot.autonomousCommands.Taxi;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -56,9 +59,24 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+  public void autonomousInit() {
+    Joystick m_buttonBox = new Joystick(OIConstants.kButtonBoxPort);
+    if(m_buttonBox.getRawButton(3)){
+      m_autonomousCommand = Taxi.getAutonomousCommand(m_robotContainer);
+    }
+    else if(m_buttonBox.getRawButton(4)){
+      // COMMAND HERE
+    }
+    else if(m_buttonBox.getRawButton(5)){
+      // COMMAND HERE
+    }
+    else if(m_buttonBox.getRawButton(6)){
+      // COMMAND HERE
+    }
+    else if(m_buttonBox.getRawButton(7)){
+      // COMMAND HERE
+    }
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
