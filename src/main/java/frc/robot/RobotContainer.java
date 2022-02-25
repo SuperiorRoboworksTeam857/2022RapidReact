@@ -23,10 +23,15 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
 
 /**
@@ -38,6 +43,9 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ClimberSubsystem m_robotClimber = new ClimberSubsystem();
+  private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
+  private final ShooterSubsystem m_robotShooter = new ShooterSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -62,7 +70,14 @@ public class RobotContainer {
                 m_robotDrive.arcadeDrive(
                     -topForwardSpeed*m_driverStick.getY(), 0.55*m_driverStick.getThrottle()),
             m_robotDrive));
+
+    m_robotIntake.setDefaultCommand(new RunCommand(() -> m_robotIntake.runIntake(0), m_robotIntake));
+
+    m_robotClimber.setDefaultCommand(new RunCommand(() -> m_robotClimber.runArms(m_driverController.getRightY()), m_robotClimber));
+
+    m_robotShooter.setDefaultCommand(new RunCommand(() -> m_robotShooter.runShooter(0), m_robotShooter));
   }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -74,6 +89,13 @@ public class RobotContainer {
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverStick, 2).whileHeld(() -> topForwardSpeed = 1)
                                         .whenReleased(() -> topForwardSpeed = 0.7);
+    new JoystickButton(m_driverStick, 1).whileHeld(() -> m_robotIntake.runIntake(1), m_robotIntake);
+    new JoystickButton(m_driverStick, 4).whenPressed(() -> m_robotIntake.toggleIntake(), m_robotIntake);
+    new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooter(1), m_robotShooter);
+    new Trigger(() -> m_driverController.getRightBumper() && m_robotShooter.isShooterAtSpeed())
+      .whenActive(() -> m_robotShooter.raiseKicker(), m_robotShooter).whenInactive(() -> m_robotShooter.lowerKicker(), m_robotShooter);
+    new JoystickButton(m_driverController, 3).whenPressed(() -> m_robotClimber.raiseArms(), m_robotClimber);
+    new JoystickButton(m_driverController, 4).whenPressed(() -> m_robotClimber.lowerArms(), m_robotClimber);
   }
 
   /**

@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ShooterConstants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -28,6 +29,8 @@ public class ShooterSubsystem extends SubsystemBase{
     public void runShooter(double speed) {
       frontMotor.set(speed);
       backMotor.set(speed);
+      SmartDashboard.putNumber("frontShooterRPM", frontMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60);
+      SmartDashboard.putNumber("backShooterRPM", backMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60);
     }
   
   
@@ -37,5 +40,8 @@ public class ShooterSubsystem extends SubsystemBase{
   
     public void raiseKicker() {
       m_kickerSolenoid.set(Value.kForward);
+    }
+    public boolean isShooterAtSpeed() {
+      return frontMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60 <= -4000;
     }
 }
