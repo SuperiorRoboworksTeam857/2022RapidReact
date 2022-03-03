@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.OIConstants;
 import frc.robot.autonomousCommands.Taxi;
+import frc.robot.autonomousCommands.ThreeBall;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -61,12 +62,17 @@ public class Robot extends TimedRobot {
   @Override
 
   public void autonomousInit() {
+
+    m_robotContainer.m_robotIntake.raiseIntake();
+    m_robotContainer.m_robotClimber.raiseArms();
+    m_robotContainer.m_robotShooter.lowerKicker();
+
     Joystick m_buttonBox = new Joystick(OIConstants.kButtonBoxPort);
     if(m_buttonBox.getRawButton(3)){
       m_autonomousCommand = Taxi.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(4)){
-      // COMMAND HERE
+      m_autonomousCommand = ThreeBall.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(5)){
       // COMMAND HERE
@@ -103,6 +109,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.m_robotIntake.raiseIntake();
+    m_robotContainer.m_robotClimber.raiseArms();
+    m_robotContainer.m_robotShooter.lowerKicker();
+
   }
 
   /** This function is called periodically during operator control. */
