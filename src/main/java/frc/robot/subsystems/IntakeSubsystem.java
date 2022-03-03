@@ -25,8 +25,8 @@ public class IntakeSubsystem extends SubsystemBase{
     }
   
     public void runIntake(double speed) {
-      if (m_intakeSolenoid.get().equals(Value.kForward)) {
-        m_intakeMotor.set(speed);
+      if (m_intakeSolenoid.get().equals(Value.kReverse)) {
+        m_intakeMotor.set(-speed);
       } else {
         m_intakeMotor.set(0);
       }
@@ -45,10 +45,10 @@ public class IntakeSubsystem extends SubsystemBase{
     }
   
     public void raiseIntake() {
-      m_intakeSolenoid.set(Value.kReverse);
+      m_intakeSolenoid.set(Value.kForward);
     }
   
     public void lowerIntake() {
-      m_intakeSolenoid.set(Value.kForward);
+      m_intakeSolenoid.set(Value.kReverse);
     }
 }
