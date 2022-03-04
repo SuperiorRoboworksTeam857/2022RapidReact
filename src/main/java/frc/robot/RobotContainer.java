@@ -10,11 +10,15 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.TurnToTargetCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -30,6 +34,8 @@ public class RobotContainer {
   public final ClimberSubsystem m_robotClimber = new ClimberSubsystem();
   public final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
   public final ShooterSubsystem m_robotShooter = new ShooterSubsystem();
+  public final LimelightSubsystem m_limelight = new LimelightSubsystem();
+
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -60,6 +66,9 @@ public class RobotContainer {
     m_robotClimber.setDefaultCommand(new RunCommand(() -> m_robotClimber.runArms(m_driverController.getRightY()), m_robotClimber));
 
     m_robotShooter.setDefaultCommand(new RunCommand(() -> m_robotShooter.runShooter(0), m_robotShooter));
+
+    m_limelight.setDefaultCommand(new RunCommand(() -> m_limelight.enableLimelight(false), m_limelight));
+
   }
 
 
@@ -73,13 +82,23 @@ public class RobotContainer {
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverStick, 2).whileHeld(() -> topForwardSpeed = 1)
                                         .whenReleased(() -> topForwardSpeed = 0.7);
-    new JoystickButton(m_driverStick, 1).whileHeld(() -> m_robotIntake.runIntake(1), m_robotIntake);
+    
+                                        new JoystickButton(m_driverStick, 1).whileHeld(() -> m_robotIntake.runIntake(1), m_robotIntake);
     new JoystickButton(m_driverStick, 4).whenPressed(() -> m_robotIntake.toggleIntake(), m_robotIntake);
-    new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooter(1), m_robotShooter);
-    new Trigger(() -> m_driverController.getRightBumper() && m_robotShooter.isShooterAtSpeed())
+    
+    new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooter(-0.35), m_robotShooter);
+    new Trigger(() -> m_driverController.getRightBumper() /*&& m_robotShooter.isShooterAtSpeed()*/)
       .whenActive(() -> m_robotShooter.raiseKicker(), m_robotShooter).whenInactive(() -> m_robotShooter.lowerKicker(), m_robotShooter);
-    new JoystickButton(m_driverController, 3).whenPressed(() -> m_robotClimber.raiseArms(), m_robotClimber);
+    
+      new JoystickButton(m_driverController, 3).whenPressed(() -> m_robotClimber.raiseArms(), m_robotClimber);
     new JoystickButton(m_driverController, 4).whenPressed(() -> m_robotClimber.lowerArms(), m_robotClimber);
+
+    new JoystickButton(m_driverStick, 3).whenPressed(() -> m_limelight.toggleDriverCam(), m_limelight);
+    new JoystickButton(m_driverStick, 5)
+      .whenPressed(new SequentialCommandGroup(
+            new InstantCommand(() -> m_limelight.enableLimelight(true), m_limelight),
+            new TurnToTargetCommand(m_robotDrive, m_limelight, m_driverStick, 50)))
+      .whenReleased(() -> m_limelight.enableLimelight(false), m_limelight);
   }
 
   
