@@ -113,6 +113,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_robotIntake.raiseIntake();
     m_robotContainer.m_robotClimber.raiseArms();
     m_robotContainer.m_robotShooter.lowerKicker();
+    m_robotContainer.m_robotClimber.resetEncoders();
 
   }
 
