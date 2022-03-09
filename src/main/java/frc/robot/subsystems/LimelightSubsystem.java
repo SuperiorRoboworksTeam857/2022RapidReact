@@ -36,6 +36,14 @@ public class LimelightSubsystem extends SubsystemBase {
     return ans;
   }
 
+  public void turnOnDriverCam() {
+    setLimelightValue("camMode", 1);
+  }
+
+  public void turnOffDriverCam() {
+    setLimelightValue("camMode", 0);
+  }
+
   public void toggleDriverCam() {
     double currentMode = getLimelightValue("camMode");
 
