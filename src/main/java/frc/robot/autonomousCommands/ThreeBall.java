@@ -95,27 +95,8 @@ public class ThreeBall {
             new RunCommand(() -> robot.m_robotIntake.runIntake(1), robot.m_robotIntake),
             ramseteCommand
         ),
-        new RunCommand(() -> robot.m_robotIntake.runIntake(0), robot.m_robotIntake),
-        new RunCommand(() -> robot.m_robotDrive.tankDriveVolts(0, 0))
+        new InstantCommand(() -> robot.m_robotIntake.runIntake(0), robot.m_robotIntake),
+        new InstantCommand(() -> robot.m_robotDrive.tankDriveVolts(0, 0))
     );
   }
 }
-
-
-// return new SequentialCommandGroup(
-//         new ParallelRaceGroup(
-//             new RunCommand(() -> m_esophagus.autoRunEsophagus(), m_esophagus),
-//             new SequentialCommandGroup(
-//                 new InstantCommand(() -> m_intake.lowerIntake(), m_intake),
-//                 new ParallelRaceGroup(
-//                     firstRamseteCommand,
-//                     new RunCommand(() -> m_intake.runIntake(1), m_intake)
-//                 ),
-//                 new ParallelRaceGroup(
-//                     secondRamseteCommand,
-//                     new RunCommand(() -> m_intake.runIntake(1), m_intake)
-//                 ),
-//                 new InstantCommand(() -> m_intake.runIntake(0), m_intake),
-//                 new InstantCommand(() -> m_robotDrive.arcadeDrive(0, 0), m_robotDrive)
-//             )
-//         ),
