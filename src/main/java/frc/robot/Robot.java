@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.OIConstants;
+import frc.robot.autonomousCommands.LowGoalTaxi;
 import frc.robot.autonomousCommands.Taxi;
 import frc.robot.autonomousCommands.ThreeBall;
 
@@ -72,7 +73,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand = Taxi.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(4)){
-      m_autonomousCommand = ThreeBall.getAutonomousCommand(m_robotContainer);
+      m_autonomousCommand = LowGoalTaxi.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(5)){
       // COMMAND HERE
@@ -81,7 +82,7 @@ public class Robot extends TimedRobot {
       // COMMAND HERE
     }
     else if(m_buttonBox.getRawButton(7)){
-      // COMMAND HERE
+      m_autonomousCommand = ThreeBall.getAutonomousCommand(m_robotContainer);
     }
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
