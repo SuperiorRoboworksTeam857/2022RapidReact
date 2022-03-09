@@ -41,7 +41,10 @@ public class ShooterSubsystem extends SubsystemBase{
     public void raiseKicker() {
       m_kickerSolenoid.set(Value.kForward);
     }
-    public boolean isShooterAtSpeed() {
-      return frontMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60 <= -4000;
+    public boolean isShooterAtSpeedUpperHub() {
+      return frontMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60 <= -2000;
+    }
+    public boolean isShooterAtSpeedLowerHub() {
+      return frontMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60 <= -1000; //<----double check
     }
 }
