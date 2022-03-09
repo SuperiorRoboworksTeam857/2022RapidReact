@@ -7,7 +7,9 @@ package frc.robot;
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.TurnToTargetCommand;
@@ -37,6 +39,8 @@ public class RobotContainer {
   public final LimelightSubsystem m_limelight = new LimelightSubsystem();
 
 
+  Compressor phCompressor = new Compressor(PneumaticsModuleType.REVPH);
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_driverStick = new Joystick(OIConstants.kDriverStickPort);
@@ -44,8 +48,11 @@ public class RobotContainer {
   private double topForwardSpeed = 0.7;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    phCompressor.enableAnalog(105, 110);
       
     CameraServer.startAutomaticCapture();
+    m_limelight.turnOnDriverCam();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -83,7 +90,8 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 2).whileHeld(() -> topForwardSpeed = 1)
                                         .whenReleased(() -> topForwardSpeed = 0.7);
     
-                                        new JoystickButton(m_driverStick, 1).whileHeld(() -> m_robotIntake.runIntake(1), m_robotIntake);
+    new JoystickButton(m_driverStick, 1).whileHeld(() -> m_robotIntake.runIntake(1), m_robotIntake);
+    new JoystickButton(m_driverStick, 3).whileHeld(() -> m_robotIntake.runIntake(-1), m_robotIntake);
     new JoystickButton(m_driverStick, 4).whenPressed(() -> m_robotIntake.toggleIntake(), m_robotIntake);
     
     new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooter(-0.35), m_robotShooter);
@@ -93,7 +101,7 @@ public class RobotContainer {
       new JoystickButton(m_driverController, 3).whenPressed(() -> m_robotClimber.raiseArms(), m_robotClimber);
     new JoystickButton(m_driverController, 4).whenPressed(() -> m_robotClimber.lowerArms(), m_robotClimber);
 
-    new JoystickButton(m_driverStick, 3).whenPressed(() -> m_limelight.toggleDriverCam(), m_limelight);
+    //new JoystickButton(m_driverStick, 3).whenPressed(() -> m_limelight.toggleDriverCam(), m_limelight);
     new JoystickButton(m_driverStick, 5)
       .whenPressed(new SequentialCommandGroup(
             new InstantCommand(() -> m_limelight.enableLimelight(true), m_limelight),
