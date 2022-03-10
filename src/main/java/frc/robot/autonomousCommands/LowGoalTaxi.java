@@ -53,12 +53,10 @@ public class LowGoalTaxi {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
     Trajectory taxiTrajectory =
         TrajectoryGenerator.generateTrajectory(
             List.of(
-            new Pose2d(0, 0, new Rotation2d(0)),
-        
+            new Pose2d(0, 0, new Rotation2d(0)),        
             new Pose2d(3, 0, new Rotation2d(0))
             ),
             config);
@@ -82,9 +80,6 @@ public class LowGoalTaxi {
 
     // Reset odometry to the starting pose of the trajectory.
     robot.m_robotDrive.resetOdometry(taxiTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    //return ramseteCommand.andThen(() -> robot.m_robotDrive.tankDriveVolts(0, 0));
 
     return new SequentialCommandGroup(
         new InstantCommand(() -> robot.m_robotIntake.lowerIntake(), robot.m_robotIntake),

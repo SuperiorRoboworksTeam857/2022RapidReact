@@ -52,18 +52,14 @@ public class ThreeBall {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
     Trajectory taxiTrajectory =
         TrajectoryGenerator.generateTrajectory(
             List.of(
-            // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(Math.PI/3)),
-            // End 3 meters straight ahead of where we started, facing forward
             new Pose2d(1.5, 1, new Rotation2d(0)),
             new Pose2d(3.8, 1, new Rotation2d(0)),
             new Pose2d(5.0, 1.5, new Rotation2d(Math.PI/3))
             ),
-            // Pass config
             config);
 
     RamseteCommand ramseteCommand =
@@ -85,9 +81,6 @@ public class ThreeBall {
 
     // Reset odometry to the starting pose of the trajectory.
     robot.m_robotDrive.resetOdometry(taxiTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    //return ramseteCommand.andThen(() -> robot.m_robotDrive.tankDriveVolts(0, 0));
 
     return new SequentialCommandGroup(
         new InstantCommand(() -> robot.m_robotIntake.lowerIntake(), robot.m_robotIntake),

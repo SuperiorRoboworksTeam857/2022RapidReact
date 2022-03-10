@@ -49,15 +49,11 @@ public class Taxi {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
     Trajectory taxiTrajectory =
         TrajectoryGenerator.generateTrajectory(
             List.of(
-            // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
-            // End 3 meters straight ahead of where we started, facing forward
             new Pose2d(2, 0, new Rotation2d(0))),
-            // Pass config
             config);
 
     RamseteCommand ramseteCommand =
