@@ -95,7 +95,7 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 4).whenPressed(() -> m_robotIntake.toggleIntake(), m_robotIntake);
     
     new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooterUpperHub(), m_robotShooter);
-    new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.5).whenActive(() -> m_robotShooter.runShooterLowerHub(), m_robotShooter);
+    new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.5).whileActiveContinuous(() -> m_robotShooter.runShooterLowerHub(), m_robotShooter);
     new Trigger(() -> m_driverController.getRightBumper() /*&& m_robotShooter.isShooterAtSpeed()*/)
       .whenActive(() -> m_robotShooter.raiseKicker(), m_robotShooter).whenInactive(() -> m_robotShooter.lowerKicker(), m_robotShooter);
     
