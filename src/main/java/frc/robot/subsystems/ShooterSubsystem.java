@@ -26,11 +26,23 @@ public class ShooterSubsystem extends SubsystemBase{
       
     }
   
-    public void runShooter(double speed) {
+    private void runShooter(double speed) {
       frontMotor.set(speed);
       backMotor.set(speed);
       SmartDashboard.putNumber("frontShooterRPM", frontMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60);
       SmartDashboard.putNumber("backShooterRPM", backMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60);
+    }
+
+    public void stopShooter() {
+      runShooter(0);
+    }
+
+    public void runShooterUpperHub() {
+      runShooter(-0.35);
+    }
+
+    public void runShooterLowerHub() {
+      runShooter(-.23);
     }
   
   

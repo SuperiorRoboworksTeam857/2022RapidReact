@@ -72,7 +72,7 @@ public class RobotContainer {
 
     m_robotClimber.setDefaultCommand(new RunCommand(() -> m_robotClimber.runArms(m_driverController.getRightY()), m_robotClimber));
 
-    m_robotShooter.setDefaultCommand(new RunCommand(() -> m_robotShooter.runShooter(0), m_robotShooter));
+    m_robotShooter.setDefaultCommand(new RunCommand(() -> m_robotShooter.stopShooter(), m_robotShooter));
 
     m_limelight.setDefaultCommand(new RunCommand(() -> m_limelight.enableLimelight(false), m_limelight));
 
@@ -94,7 +94,8 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 3).whileHeld(() -> m_robotIntake.runIntake(-1), m_robotIntake);
     new JoystickButton(m_driverStick, 4).whenPressed(() -> m_robotIntake.toggleIntake(), m_robotIntake);
     
-    new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooter(-0.35), m_robotShooter);
+    new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooterUpperHub(), m_robotShooter);
+    new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.5).whenActive(() -> m_robotShooter.runShooterLowerHub(), m_robotShooter);
     new Trigger(() -> m_driverController.getRightBumper() /*&& m_robotShooter.isShooterAtSpeed()*/)
       .whenActive(() -> m_robotShooter.raiseKicker(), m_robotShooter).whenInactive(() -> m_robotShooter.lowerKicker(), m_robotShooter);
     

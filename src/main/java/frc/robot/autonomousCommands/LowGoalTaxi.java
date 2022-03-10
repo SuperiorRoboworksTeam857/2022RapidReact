@@ -90,13 +90,13 @@ public class LowGoalTaxi {
         new InstantCommand(() -> robot.m_robotIntake.lowerIntake(), robot.m_robotIntake),
  
       
-        new RunCommand(() -> robot.m_robotShooter.runShooter(-.23), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedLowerHub),
+        new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedLowerHub),
         new InstantCommand(() -> robot.m_robotShooter.raiseKicker(), robot.m_robotShooter ),
         new ParallelRaceGroup(
-            new RunCommand(() -> robot.m_robotShooter.runShooter(-.23), robot.m_robotShooter),
+            new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter),
             new WaitCommand(1)
         ),
-        new InstantCommand(() -> robot.m_robotShooter.runShooter(0), robot.m_robotShooter),
+        new InstantCommand(() -> robot.m_robotShooter.stopShooter(), robot.m_robotShooter),
         new InstantCommand(() -> robot.m_robotShooter.lowerKicker(), robot.m_robotShooter ),
 
         ramseteCommand,
