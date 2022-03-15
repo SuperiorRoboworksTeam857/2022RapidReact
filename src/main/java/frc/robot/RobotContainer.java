@@ -70,7 +70,7 @@ public class RobotContainer {
 
     m_robotIntake.setDefaultCommand(new RunCommand(() -> m_robotIntake.runIntake(0), m_robotIntake));
 
-    m_robotClimber.setDefaultCommand(new RunCommand(() -> m_robotClimber.runArms(m_driverController.getRightY()), m_robotClimber));
+    m_robotClimber.setDefaultCommand(new RunCommand(() -> m_robotClimber.runArms(0), m_robotClimber));
 
     m_robotShooter.setDefaultCommand(new RunCommand(() -> m_robotShooter.stopShooter(), m_robotShooter));
 
@@ -96,11 +96,14 @@ public class RobotContainer {
     
     new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooterUpperHub(), m_robotShooter);
     new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.5).whileActiveContinuous(() -> m_robotShooter.runShooterLowerHub(), m_robotShooter);
-    new Trigger(() -> m_driverController.getRightBumper() /*&& m_robotShooter.isShooterAtSpeed()*/)
-      .whenActive(() -> m_robotShooter.raiseKicker(), m_robotShooter).whenInactive(() -> m_robotShooter.lowerKicker(), m_robotShooter);
+    new Trigger(() -> m_driverController.getRightBumper() && (m_robotShooter.isShooterAtSpeed() || m_driverController.getAButton()))
+      .whenActive(() -> m_robotShooter.raiseKicker(m_driverController.getAButton()), m_robotShooter).whenInactive(() -> m_robotShooter.lowerKicker(), m_robotShooter);
     
-      new JoystickButton(m_driverController, 3).whenPressed(() -> m_robotClimber.raiseArms(), m_robotClimber);
+    new JoystickButton(m_driverController, 3).whenPressed(() -> m_robotClimber.raiseArms(), m_robotClimber);
     new JoystickButton(m_driverController, 4).whenPressed(() -> m_robotClimber.lowerArms(), m_robotClimber);
+    new Trigger(() -> m_driverController.getPOV() == 0).whileActiveContinuous(() -> m_robotClimber.runArms(-1), m_robotClimber);
+    new Trigger(() -> m_driverController.getPOV() == 180).whileActiveContinuous(() -> m_robotClimber.runArms(1), m_robotClimber);
+
 
     //new JoystickButton(m_driverStick, 3).whenPressed(() -> m_limelight.toggleDriverCam(), m_limelight);
     new JoystickButton(m_driverStick, 5)
