@@ -121,10 +121,10 @@ public class ThreeBall {
         new InstantCommand(() -> robot.m_robotIntake.lowerIntake(), robot.m_robotIntake),
  
         // Shoot preload ball
-        new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedLowerHub),
+        new RunCommand(() -> robot.m_robotShooter.runShooterUpperHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedUpperHub),
         new InstantCommand(() -> robot.m_robotShooter.raiseKicker(), robot.m_robotShooter ),
         new ParallelRaceGroup(
-            new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter),
+            new RunCommand(() -> robot.m_robotShooter.runShooterUpperHub(), robot.m_robotShooter),
             new WaitCommand(1)
         ),
         new InstantCommand(() -> robot.m_robotShooter.stopShooter(), robot.m_robotShooter),
@@ -145,10 +145,10 @@ public class ThreeBall {
         new InstantCommand(() -> robot.m_robotDrive.tankDriveVolts(0, 0)),
 
         // Shoot 2nd ball
-        new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedLowerHub),
+        new RunCommand(() -> robot.m_robotShooter.runShooterUpperHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedUpperHub),
         new InstantCommand(() -> robot.m_robotShooter.raiseKicker(), robot.m_robotShooter ),
         new ParallelRaceGroup(
-            new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter),
+            new RunCommand(() -> robot.m_robotShooter.runShooterUpperHub(), robot.m_robotShooter),
             new WaitCommand(1)
         ),
         new InstantCommand(() -> robot.m_robotShooter.lowerKicker(), robot.m_robotShooter ),
@@ -159,10 +159,10 @@ public class ThreeBall {
         new WaitCommand(2).withInterrupt(robot.m_robotShooter::isBallPresent),
 
         // Shoot 3rd ball
-        new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedLowerHub),
+        new RunCommand(() -> robot.m_robotShooter.runShooterUpperHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedUpperHub),
         new InstantCommand(() -> robot.m_robotShooter.raiseKicker(), robot.m_robotShooter ),
         new ParallelRaceGroup(
-            new RunCommand(() -> robot.m_robotShooter.runShooterLowerHub(), robot.m_robotShooter),
+            new RunCommand(() -> robot.m_robotShooter.runShooterUpperHub(), robot.m_robotShooter),
             new WaitCommand(1)
         ),
 
