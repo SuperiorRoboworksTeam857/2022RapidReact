@@ -32,11 +32,12 @@ public class TurnToTargetCommand extends CommandBase {
     
     @Override
     public void execute(){
+        m_robotDrive.setBrakeMode(true);
         boolean onTarget = false;
 
         double kP = 0.015;
 
-        double tx = m_limelight.getLimelightValue("tx") - 5;
+        double tx = m_limelight.getLimelightValue("tx");
     
         if (m_limelight.getLimelightValue("camMode") == 1) {
             m_limelight.toggleDriverCam();
@@ -56,6 +57,7 @@ public class TurnToTargetCommand extends CommandBase {
     @Override
     public void end(boolean inturrupted){
         m_robotDrive.arcadeDrive(0, 0);
+        m_robotDrive.setBrakeMode(false);
         timer.stop();
     }
 
