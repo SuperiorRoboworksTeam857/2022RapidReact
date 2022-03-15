@@ -4,15 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.OIConstants;
+import frc.robot.autonomousCommands.HighGoalTaxi;
 import frc.robot.autonomousCommands.LowGoalTaxi;
 import frc.robot.autonomousCommands.Taxi;
 import frc.robot.autonomousCommands.ThreeBall;
+import frc.robot.autonomousCommands.TwoBall;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -76,10 +79,10 @@ public class Robot extends TimedRobot {
       m_autonomousCommand = LowGoalTaxi.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(5)){
-      // COMMAND HERE
+      m_autonomousCommand = HighGoalTaxi.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(6)){
-      // COMMAND HERE
+      m_autonomousCommand = TwoBall.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(7)){
       m_autonomousCommand = ThreeBall.getAutonomousCommand(m_robotContainer);
@@ -118,9 +121,13 @@ public class Robot extends TimedRobot {
 
   }
 
+  
+
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void testInit() {
