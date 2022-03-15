@@ -71,7 +71,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 0.5; //1.5
+    public static final double kMaxSpeedMetersPerSecond = 1; //1.5
     public static final double kFastMaxSpeedMetersPerSecond = 3.5;
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
 
