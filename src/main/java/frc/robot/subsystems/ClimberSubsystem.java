@@ -38,6 +38,9 @@ public class ClimberSubsystem extends SubsystemBase{
           (leftMotor.getEncoder().getPosition() > -250 && movingUp)) {
         leftMotor.set(speed);
       }
+      else if (movingDown) {
+        leftMotor.set(speed*0.1);
+      }
       else {
         leftMotor.set(0);
       }
@@ -46,6 +49,9 @@ public class ClimberSubsystem extends SubsystemBase{
       if ((rightMotor.getEncoder().getPosition() < 0 && movingDown) ||
           (rightMotor.getEncoder().getPosition() > -250 && movingUp)) {
             rightMotor.set(speed);
+      }
+      else if (movingDown) {
+        rightMotor.set(speed*0.1);
       }
       else {
         rightMotor.set(0);
