@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -163,5 +164,19 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return -m_gyro.getRate();
+  }
+
+  public void setBrakeMode(boolean brakeOn) {
+    if (brakeOn) {
+      m_frontLeftMotor.setIdleMode(IdleMode.kBrake);
+      m_backLeftMotor.setIdleMode(IdleMode.kBrake);
+      m_frontRightMotor.setIdleMode(IdleMode.kBrake);
+      m_backRightMotor.setIdleMode(IdleMode.kBrake);
+    }
+    else {
+      m_frontLeftMotor.setIdleMode(IdleMode.kCoast);
+      m_backLeftMotor.setIdleMode(IdleMode.kCoast);
+      m_frontRightMotor.setIdleMode(IdleMode.kCoast);
+      m_backRightMotor.setIdleMode(IdleMode.kCoast);    }
   }
 }
