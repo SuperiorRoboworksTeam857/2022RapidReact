@@ -32,8 +32,8 @@ public class ShooterSubsystem extends SubsystemBase{
   }
 
   private void runShooter(double speed) {
-    frontMotor.set(speed);
-    backMotor.set(speed);
+    frontMotor.setVoltage(speed);
+    backMotor.setVoltage(speed);
     SmartDashboard.putNumber("frontShooterRPM", frontMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60);
     SmartDashboard.putNumber("backShooterRPM", backMotor.getSensorCollection().getIntegratedSensorVelocity() * 10/2048*60);
   }
@@ -44,12 +44,14 @@ public class ShooterSubsystem extends SubsystemBase{
   }
 
   public void runShooterUpperHub() {
-    runShooter(-0.35);
+    //runShooter(-0.35);
+    runShooter(-4.125); //-4.375, 4
     m_height = Height.ShootingHigh;
   }
 
   public void runShooterLowerHub() {
-    runShooter(-.23);
+    //runShooter(-.23);
+    runShooter(-2.5); // -2.875
     m_height = Height.ShootingLow;
   }
 
