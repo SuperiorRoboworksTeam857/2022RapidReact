@@ -50,7 +50,9 @@ public class TurnToTargetCommand extends CommandBase {
         }
 
         if (onTarget) {
-            m_robotDrive.arcadeDrive(-0.3 * m_stick.getY(), 0);
+            if (m_stick != null) {
+                m_robotDrive.arcadeDrive(-0.3 * m_stick.getY(), 0);
+            }
         }
     }
 
