@@ -36,10 +36,10 @@ public class IntakeSubsystem extends SubsystemBase{
       return m_intakeMotor.get() !=0;
     }
   
-    public void toggleIntake() {
+    public void toggleIntake(double driveSpeed) {
       if (m_intakeSolenoid.get().equals(Value.kReverse)) {
         m_intakeSolenoid.set(Value.kForward);
-      } else {
+      } else if (driveSpeed < 1) {
         m_intakeSolenoid.set(Value.kReverse);
       }
     }
