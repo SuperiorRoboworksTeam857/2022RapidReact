@@ -25,6 +25,7 @@ import frc.robot.autonomousCommands.TwoBall;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private ThreeBall threeBallAuto;
 
   private RobotContainer m_robotContainer;
 
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    threeBallAuto = new ThreeBall();
+    threeBallAuto.generateTrajectories();
   }
 
   /**
@@ -85,7 +88,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand = TwoBall.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(7)){
-      m_autonomousCommand = ThreeBall.getAutonomousCommand(m_robotContainer);
+      m_autonomousCommand = threeBallAuto.getAutonomousCommand(m_robotContainer);
     }
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
