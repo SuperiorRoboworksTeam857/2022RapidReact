@@ -70,6 +70,14 @@ public class ClimberSubsystem extends SubsystemBase{
       m_climberSolenoid.set(Value.kForward);
     }
 
+    public void toggleArms(){
+      if (m_climberSolenoid.get().equals(Value.kReverse)) {
+        m_climberSolenoid.set(Value.kForward);
+      } else {
+        m_climberSolenoid.set(Value.kReverse);
+      }
+    }
+    
     public void resetEncoders() {
       leftMotor.getEncoder().setPosition(0);
       rightMotor.getEncoder().setPosition(0);
