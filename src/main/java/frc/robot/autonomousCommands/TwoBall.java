@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.TurnToTargetCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -121,6 +122,8 @@ public class TwoBall {
             new RunCommand(() -> robot.m_robotIntake.runIntake(1), robot.m_robotIntake),
             firstRamseteCommand
         ),
+        new InstantCommand(() -> robot.m_robotDrive.tankDriveVolts(0, 0)),
+        new WaitCommand(2),
         new ParallelRaceGroup(
             new RunCommand(() -> robot.m_robotIntake.runIntake(1), robot.m_robotIntake),
             secondRamseteCommand
@@ -129,6 +132,15 @@ public class TwoBall {
         // Stop driving and stop intake
         new InstantCommand(() -> robot.m_robotIntake.runIntake(0), robot.m_robotIntake),
         new InstantCommand(() -> robot.m_robotDrive.tankDriveVolts(0, 0)),
+
+        // Target with Limelight
+        new InstantCommand(() -> robot.m_limelight.enableLimelight(true), robot.m_limelight),
+        new ParallelRaceGroup(
+            new TurnToTargetCommand(robot.m_robotDrive, robot.m_limelight, null, 2),
+            new WaitCommand(2)
+        ),
+        new InstantCommand(() -> robot.m_robotDrive.tankDriveVolts(0, 0)),
+        new InstantCommand(() -> robot.m_limelight.enableLimelight(false), robot.m_limelight),
 
         // Shoot 1st ball
         new RunCommand(() -> robot.m_robotShooter.runShooterUpperHub(), robot.m_robotShooter).withInterrupt(robot.m_robotShooter::isShooterAtSpeedUpperHub),
