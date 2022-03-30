@@ -15,6 +15,8 @@ public class IntakeSubsystem extends SubsystemBase{
      IntakeConstants.kIntakeForwardPort,
       IntakeConstants.kIntakeReversePort);
 
+    VictorSP m_agitatorMotor = new VictorSP(IntakeConstants.kIntakeAgitatorPort);
+
     public IntakeSubsystem() {
     
     }
@@ -27,7 +29,9 @@ public class IntakeSubsystem extends SubsystemBase{
     public void runIntake(double speed) {
       if (m_intakeSolenoid.get().equals(Value.kReverse)) {
         m_intakeMotor.set(-speed);
+        m_agitatorMotor.set(0.2);
       } else {
+        m_intakeMotor.set(0);
         m_intakeMotor.set(0);
       }
     }
@@ -51,4 +55,5 @@ public class IntakeSubsystem extends SubsystemBase{
     public void lowerIntake() {
       m_intakeSolenoid.set(Value.kReverse);
     }
+
 }
