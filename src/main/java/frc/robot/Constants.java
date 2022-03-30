@@ -48,6 +48,7 @@ public final class Constants {
     public static final int kIntakeMotorPort = 0;
     public static final int kIntakeForwardPort = 6;
     public static final int kIntakeReversePort = 14;
+    public static final int kIntakeAgitatorPort = 9;
   }
 
   public static final class ClimberConstants {
