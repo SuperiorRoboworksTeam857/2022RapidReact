@@ -65,7 +65,7 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 m_robotDrive.arcadeDrive(
-                    -topForwardSpeed*m_driverStick.getY(), 0.55*m_driverStick.getThrottle()),
+                    -topForwardSpeed*m_driverStick.getY(), 0.8*topForwardSpeed*m_driverStick.getThrottle()),
             m_robotDrive));
 
     m_robotIntake.setDefaultCommand(new RunCommand(() -> m_robotIntake.runIntake(0), m_robotIntake));
