@@ -43,7 +43,7 @@ public class ThreeBall {
         // Create config for trajectory
         TrajectoryConfig firstConfig =
             new TrajectoryConfig(
-                    AutoConstants.kMaxSpeedMetersPerSecond,
+                    AutoConstants.kFastMaxSpeedMetersPerSecond,
                     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(DriveConstants.kDriveKinematics)
@@ -51,7 +51,7 @@ public class ThreeBall {
                 .addConstraint(autoVoltageConstraint);
         TrajectoryConfig secondConfig =
             new TrajectoryConfig(
-                    AutoConstants.kMaxSpeedMetersPerSecond,
+                    AutoConstants.kFastMaxSpeedMetersPerSecond,
                     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(DriveConstants.kDriveKinematics)
