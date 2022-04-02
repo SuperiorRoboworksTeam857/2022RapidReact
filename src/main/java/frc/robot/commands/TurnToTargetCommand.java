@@ -37,7 +37,9 @@ public class TurnToTargetCommand extends CommandBase {
 
         double kP = 0.015;
 
-        double tx = m_limelight.getLimelightValue("tx");
+        // -5 to point left of goal, +5 to point right of goal
+        // +2 is pretty well centered
+        double tx = m_limelight.getLimelightValue("tx") + 2;
     
         if (m_limelight.getLimelightValue("camMode") == 1) {
             m_limelight.toggleDriverCam();
