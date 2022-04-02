@@ -73,7 +73,7 @@ public final class Constants {
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 1.5; //1.5
-    public static final double kFastMaxSpeedMetersPerSecond = 2.5;
+    public static final double kFastMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
