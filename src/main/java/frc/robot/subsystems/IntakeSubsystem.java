@@ -27,12 +27,16 @@ public class IntakeSubsystem extends SubsystemBase{
     }
   
     public void runIntake(double speed) {
-      m_agitatorMotor.set(-0.2*speed);
+      runAgitator(speed);
       if (m_intakeSolenoid.get().equals(Value.kReverse)) {
         m_intakeMotor.set(-speed);
       } else {
         m_intakeMotor.set(0);
       }
+    }
+
+    public void runAgitator(double speed) {
+      m_agitatorMotor.set(-0.2*speed);
     }
   
     public boolean isIntakeRunning() {
