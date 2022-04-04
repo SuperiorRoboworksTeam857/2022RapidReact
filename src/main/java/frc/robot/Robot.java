@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.OIConstants;
+import frc.robot.autonomousCommands.FourBall;
 import frc.robot.autonomousCommands.HighGoalTaxi;
 import frc.robot.autonomousCommands.LowGoalTaxi;
 import frc.robot.autonomousCommands.Taxi;
 import frc.robot.autonomousCommands.ThreeBall;
+import frc.robot.autonomousCommands.ThreeBallNearTarmac;
 import frc.robot.autonomousCommands.TwoBall;
 
 /**
@@ -26,6 +28,7 @@ import frc.robot.autonomousCommands.TwoBall;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private ThreeBall threeBallAuto;
+  private FourBall fourBallAuto;
 
   private RobotContainer m_robotContainer;
 
@@ -40,6 +43,8 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     threeBallAuto = new ThreeBall();
     threeBallAuto.generateTrajectories();
+    fourBallAuto = new FourBall();
+    fourBallAuto.generateTrajectories();
   }
 
   /**
@@ -79,16 +84,17 @@ public class Robot extends TimedRobot {
       m_autonomousCommand = Taxi.getAutonomousCommand(m_robotContainer);
     }
     else if(m_buttonBox.getRawButton(4)){
-      m_autonomousCommand = LowGoalTaxi.getAutonomousCommand(m_robotContainer);
-    }
-    else if(m_buttonBox.getRawButton(5)){
+      //m_autonomousCommand = LowGoalTaxi.getAutonomousCommand(m_robotContainer);
       m_autonomousCommand = HighGoalTaxi.getAutonomousCommand(m_robotContainer);
     }
-    else if(m_buttonBox.getRawButton(6)){
+    else if(m_buttonBox.getRawButton(5)){
       m_autonomousCommand = TwoBall.getAutonomousCommand(m_robotContainer);
     }
-    else if(m_buttonBox.getRawButton(7)){
+    else if(m_buttonBox.getRawButton(6)){
       m_autonomousCommand = threeBallAuto.getAutonomousCommand(m_robotContainer);
+    }
+    else if(m_buttonBox.getRawButton(7)){
+      m_autonomousCommand = fourBallAuto.getAutonomousCommand(m_robotContainer);
     }
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
