@@ -19,8 +19,10 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -90,7 +92,7 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 2).whenPressed(
                                           new SequentialCommandGroup(
                                             new InstantCommand(() -> topForwardSpeed = 1),
-                                            new InstantCommand(() -> m_robotIntake.raiseIntake())
+                                            new InstantCommand(() -> m_robotIntake.raiseIntake(), m_robotIntake)
                                           )
                                         )
                                         .whenReleased(() -> topForwardSpeed = 0.7);
@@ -98,6 +100,20 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 1).whileHeld(() -> m_robotIntake.runIntake(1), m_robotIntake);
     new JoystickButton(m_driverStick, 3).whileHeld(() -> m_robotIntake.runIntake(-1), m_robotIntake);
     new JoystickButton(m_driverStick, 4).whenPressed(() -> m_robotIntake.toggleIntake(topForwardSpeed), m_robotIntake);
+    new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.5).whenActive(
+      new ParallelRaceGroup(
+        new RunCommand(() -> m_robotIntake.runIntake(1), m_robotIntake),
+        new SequentialCommandGroup(
+          new InstantCommand(() -> m_robotIntake.lowerIntake()),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> m_robotIntake.raiseIntake()),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> m_robotIntake.lowerIntake()),
+          new WaitCommand(0.5),
+          new InstantCommand(() -> m_robotIntake.raiseIntake())
+        )
+      )
+    );
     
     new JoystickButton(m_driverController, 5).whileHeld(() -> m_robotShooter.runShooterUpperHub(), m_robotShooter);
     new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.5).whileActiveContinuous(() -> m_robotShooter.runShooterLowerHub(), m_robotShooter);
